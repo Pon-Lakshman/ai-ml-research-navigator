@@ -58,9 +58,9 @@ settings = Settings()
 # ============================================================
 # Backward-Compatible Constants
 # ============================================================
-# Existing project files can continue using:
-# TOP_K, LLM_MODEL, EMBEDDING_MODEL, etc.
-# without requiring changes everywhere else.
+'''Existing project files can continue using:
+TOP_K, LLM_MODEL, EMBEDDING_MODEL, etc.
+without requiring changes everywhere else.'''
 
 COLLECTION_NAME = settings.collection_name
 
