@@ -1312,7 +1312,7 @@ These results represent the evaluation datasets and pipeline configuration used 
 
 # Author
 
-**Ponlakshman Narayanan**
+**Pon Lakshman**
 
 AI/ML | Data Science | Generative AI | RAG | LLM Applications
 
