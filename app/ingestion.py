@@ -69,7 +69,7 @@ if __name__ == "__main__":
 
         print("\nFirst chunk:")
         print("-" * 60)
-        print(chunks[0].page_content[:1000])
+        print(chunks[0].page_content)
 
         print("\nMetadata:")
         print(chunks[0].metadata)
