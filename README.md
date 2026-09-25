@@ -1100,8 +1100,6 @@ chroma_db/
 *.sqlite3
 __pycache__/
 .pytest_cache/
-.mypy_cache/
-.ruff_cache/
 .venv/
 ```
 
