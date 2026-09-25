@@ -1122,50 +1122,17 @@ instead.
 The current `.gitignore` includes:
 
 ```gitignore
-# Python
+# Python cache
 __pycache__/
-*.py[cod]
-*.pyo
 
 # Virtual environment
 .venv/
-venv/
-env/
 
-# Environment variables
+# Environment variables / secrets
 .env
 
-# Chroma database
+# Chroma vector database
 chroma_db/
-
-# SQLite
-*.db
-*.sqlite
-*.sqlite3
-
-# Logs
-*.log
-
-# IDE
-.vscode/
-.idea/
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Python cache
-.pytest_cache/
-.mypy_cache/
-.ruff_cache/
-
-# Temporary files
-*.tmp
-*.temp
-
-# Hugging Face cache
-.cache/
-huggingface_cache/
 ```
 
 ---
@@ -1251,10 +1218,8 @@ This project demonstrates practical understanding of:
 - Chroma
 - Hugging Face
 - Ollama
-- Pytest
 - Evaluation methodology
 - Environment configuration
-- Git hygiene
 
 ---
 
