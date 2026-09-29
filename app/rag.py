@@ -65,16 +65,16 @@ def retrieve_documents(question):
             f"Distance: {score:.3f}"
         )
 
-        # ---------------------------------------------
-        # Distance filtering
-        # ---------------------------------------------
+        #**********************
+        # Distance filtering  *
+        #**********************
 
         if score > DISTANCE_THRESHOLD:
             continue
 
-        # ---------------------------------------------
-        # Duplicate filtering
-        # ---------------------------------------------
+        #************************
+        # Duplicate filtering   *
+        #************************
 
         chunk_text = document.page_content.strip()
 
