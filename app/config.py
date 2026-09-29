@@ -15,13 +15,7 @@ CHROMA_DIR = BASE_DIR / "chroma_db"
 
 class Settings(BaseSettings):
 
-    # Application
-    app_name: str = "AI/ML Research Navigator"
-    app_env: str = "development"
-    log_level: str = "INFO"
-
     # LLM
-    llm_provider: str = "ollama"
     llm_model: str = "qwen2.5:3b"
 
     # Embeddings
