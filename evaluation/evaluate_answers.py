@@ -33,12 +33,7 @@ QUESTIONS_FILE = (
 
 def load_questions():
 
-    with open(
-        QUESTIONS_FILE,
-        "r",
-        encoding="utf-8"
-    ) as file:
-
+    with open(QUESTIONS_FILE, "r", encoding="utf-8") as file:
         return json.load(file)
 
 
@@ -112,33 +107,22 @@ def evaluate():
     print("RAG ANSWER-QUALITY EVALUATION")
     print("=" * 70)
 
-    for index, item in enumerate(
-        questions,
-        start=1
-    ):
+    for index, item in enumerate(questions, start=1):
 
         question = item["question"]
 
-        expected_keywords = item[
-            "expected_keywords"
-        ]
+        expected_keywords = item["expected_keywords"]
 
-        answerable = item[
-            "answerable"
-        ]
+        answerable = item["answerable"]
 
         print()
-        print(
-            f"[{index}/{total}] {question}"
-        )
+        print(f"[{index}/{total}] {question}")
 
         # -------------------------------------------------
         # Run RAG
         # -------------------------------------------------
 
-        answer, documents = ask_question(
-            question
-        )
+        answer, documents = ask_question(question)
 
         # -------------------------------------------------
         # Answerable question
@@ -148,43 +132,26 @@ def evaluate():
 
             answerable_total += 1
 
-            score = keyword_score(
-                answer,
-                expected_keywords
-            )
+            score = keyword_score(answer, expected_keywords)
 
             keyword_scores.append(score)
 
-            print(
-                f"Keyword coverage: "
-                f"{score * 100:.1f}%"
-            )
+            print(f"Keyword coverage: "f"{score * 100:.1f}%")
 
             if score >= 0.50:
 
                 answerable_pass += 1
 
-                print(
-                    "Answer quality: PASS"
-                )
+                print( "Answer quality: PASS")
 
             else:
 
-                print(
-                    "Answer quality: FAIL"
-                )
-                print(
-                    "Expected keywords:"
-                )
-                print(
-                    expected_keywords
-                )
-                print(
-                    "Full answer:"
-                )
-                print(
-                    "Retrieved sources:"
-                )
+                print("Answer quality: FAIL")
+                print("Expected keywords:")
+                print(expected_keywords)
+                print("Full answer:")
+                print(answer)
+                print("Retrieved sources:")
                 for document in documents:
 
                     print(
@@ -213,27 +180,17 @@ def evaluate():
 
                 unanswerable_pass += 1
 
-                print(
-                    "Out-of-knowledge handling: PASS"
-                )
+                print("Out-of-knowledge handling: PASS")
 
             else:
 
-                print(
-                    "Out-of-knowledge handling: FAIL"
-                )
+                print("Out-of-knowledge handling: FAIL")
 
         # -------------------------------------------------
         # Print answer
         # -------------------------------------------------
 
-        print(
-            "Answer:",
-            answer[:500].replace(
-                "\n",
-                " "
-            )
-        )
+        print("Answer:", answer[:500].replace("\n"," "))
 
     # -----------------------------------------------------
     # Calculate results
@@ -241,10 +198,7 @@ def evaluate():
 
     if answerable_total > 0:
 
-        answerable_accuracy = (
-            answerable_pass
-            / answerable_total
-        ) * 100
+        answerable_accuracy = (answerable_pass/ answerable_total) * 100
 
     else:
 
@@ -252,10 +206,7 @@ def evaluate():
 
     if unanswerable_total > 0:
 
-        refusal_accuracy = (
-            unanswerable_pass
-            / unanswerable_total
-        ) * 100
+        refusal_accuracy = (unanswerable_pass/ unanswerable_total) * 100
 
     else:
 
@@ -263,10 +214,7 @@ def evaluate():
 
     if keyword_scores:
 
-        average_keyword_coverage = (
-            sum(keyword_scores)
-            / len(keyword_scores)
-        ) * 100
+        average_keyword_coverage = (sum(keyword_scores)/ len(keyword_scores)) * 100
 
     else:
 

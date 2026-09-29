@@ -1,15 +1,17 @@
 import requests
 import streamlit as st
 
-# ============================================================
-# FastAPI Backend
-# ============================================================
+
+#*********************
+# FastAPI Backend    *
+#*********************
 
 API_URL = "http://127.0.0.1:8000"
 
-# ============================================================
-# Streamlit Page Configuration
-# ============================================================
+
+#*********************************
+# Streamlit Page Configuration   *
+#*********************************
 
 st.set_page_config(
     page_title="AI/ML Research Navigator",
@@ -17,9 +19,35 @@ st.set_page_config(
     layout="wide",
 )
 
-# ============================================================
-# Application Header
-# ============================================================
+
+#******************
+# Session State   *
+#******************
+
+if "question" not in st.session_state:
+    st.session_state.question = ""
+
+if "selected_question" not in st.session_state:
+    st.session_state.selected_question = ""
+
+
+#******************************
+# Example Question Callback   *
+#******************************
+
+def select_example_question(example):
+    """
+    Store the selected example question.
+
+    The callback runs before Streamlit redraws the page.
+    """
+
+    st.session_state.selected_question = example
+
+
+#***********************
+# Application Header   *
+#***********************
 
 st.title("🔬 AI/ML Research Navigator")
 
@@ -30,9 +58,10 @@ st.markdown(
     """
 )
 
-# ============================================================
-# Sidebar
-# ============================================================
+
+#************
+# Sidebar   *
+#************
 
 with st.sidebar:
 
@@ -69,23 +98,12 @@ with st.sidebar:
         "retrieved research-paper context."
     )
 
-# ============================================================
-# Question Input
-# ============================================================
+
+#*********************
+# Example Questions  *
+#*********************
 
 st.subheader("Ask a Research Question")
-
-question = st.text_input(
-    "Question",
-    placeholder=(
-        "e.g. How is Vision Transformer different from ResNet?"
-    ),
-    label_visibility="collapsed",
-)
-
-# ============================================================
-# Example Questions
-# ============================================================
 
 st.caption("Example questions:")
 
@@ -102,17 +120,45 @@ for index, example in enumerate(example_questions):
 
     with example_columns[index]:
 
-        if st.button(
+        st.button(
             example,
             key=f"example_question_{index}",
             use_container_width=True,
-        ):
-            question = example
+            on_click=select_example_question,
+            args=(example,),
+        )
 
 
-# ============================================================
-# Ask Question
-# ============================================================
+#*****************************************
+# Update Question From Selected Example  *
+#*****************************************
+
+if st.session_state.selected_question:
+
+    st.session_state.question = (
+        st.session_state.selected_question
+    )
+
+    st.session_state.selected_question = ""
+
+
+#*******************
+# Question Input   *
+#*******************
+
+st.text_input(
+    "Question",
+    key="question",
+    placeholder=(
+        "e.g. How is Vision Transformer different from ResNet?"
+    ),
+    label_visibility="collapsed",
+)
+
+
+#*****************
+# Ask Question   *
+#*****************
 
 if st.button(
     "Ask Question",
@@ -120,11 +166,14 @@ if st.button(
     use_container_width=True,
 ):
 
-    # --------------------------------------------------------
-    # Validate Question
-    # --------------------------------------------------------
+    question = st.session_state.question.strip()
 
-    if not question.strip():
+
+    #**********************
+    # Validate Question   *
+    #**********************
+
+    if not question:
 
         st.warning(
             "Please enter a research question."
@@ -134,9 +183,9 @@ if st.button(
 
         try:
 
-            # ------------------------------------------------
-            # Send Request to FastAPI
-            # ------------------------------------------------
+            #***************************
+            # Send Request to FastAPI  *
+            #***************************
 
             with st.spinner(
                 "Searching research papers and generating an answer..."
@@ -150,9 +199,10 @@ if st.button(
                     timeout=120,
                 )
 
-            # =================================================
-            # Successful Response
-            # =================================================
+
+            #************************
+            # Successful Response   *
+            #************************
 
             if response.status_code == 200:
 
@@ -168,25 +218,26 @@ if st.button(
                     []
                 )
 
-                # ------------------------------------------------
-                # Answer Section
-                # ------------------------------------------------
+
+                #***********
+                # Answer   *
+                #***********
 
                 st.divider()
+
                 st.subheader("Answer")
+
                 st.markdown(answer)
 
-                # ------------------------------------------------
-                # Sources Section
-                # ------------------------------------------------
+
+                #***********
+                # Sources  *
+                #***********
 
                 st.divider()
+
                 st.subheader("Sources")
 
-
-                # =================================================
-                # No Sources
-                # =================================================
 
                 if not sources:
 
@@ -194,24 +245,14 @@ if st.button(
                         "No sources found."
                     )
 
-                # =================================================
-                # Sources Available
-                # =================================================
-
                 else:
-
-                    # Dictionary structure:
-                    #
-                    # {
-                    #     "resnet.pdf": {1, 2, 3},
-                    #     "vit.pdf": {2, 3, 8}
-                    # }
 
                     source_pages = {}
 
-                    # ------------------------------------------------
-                    # Collect Unique Pages
-                    # ------------------------------------------------
+
+                    #***********************
+                    # Collect unique pages *
+                    #***********************
 
                     for source in sources:
 
@@ -229,14 +270,12 @@ if st.button(
 
                             source_pages[filename] = set()
 
+                        source_pages[filename].add(page)
 
-                        source_pages[filename].add(
-                            page
-                        )
 
-                    # ------------------------------------------------
-                    # Display Documents Alphabetically
-                    # ------------------------------------------------
+                    #*********************
+                    # Display documents  *
+                    #*********************
 
                     for filename in sorted(
                         source_pages.keys()
@@ -244,9 +283,10 @@ if st.button(
 
                         pages = source_pages[filename]
 
-                        # ------------------------------------------------
-                        # Sort Page Numbers
-                        # ------------------------------------------------
+
+                        #**************
+                        # Sort pages  *
+                        #**************
 
                         try:
 
@@ -265,18 +305,16 @@ if st.button(
                                 key=str
                             )
 
-                        # ------------------------------------------------
-                        # Convert Pages to Text
-                        # ------------------------------------------------
 
                         pages_text = ", ".join(
                             str(page)
                             for page in sorted_pages
                         )
 
-                        # ------------------------------------------------
-                        # Display Source
-                        # ------------------------------------------------
+
+                        #******************
+                        # Display source  *
+                        #******************
 
                         with st.expander(
                             f"📄 {filename}"
@@ -286,10 +324,10 @@ if st.button(
                                 f"Pages: {pages_text}"
                             )
 
-            # =================================================
-            # API Error
-            # =================================================
 
+            #*************
+            # API Error  *
+            #*************
             else:
 
                 st.error(
@@ -305,9 +343,10 @@ if st.button(
                         response.text
                     )
 
-        # =====================================================
-        # FastAPI Connection Error
-        # =====================================================
+
+        #****************************
+        # FastAPI Connection Error  *
+        #****************************
 
         except requests.exceptions.ConnectionError:
 
@@ -320,9 +359,10 @@ if st.button(
                 "http://127.0.0.1:8000"
             )
 
-        # =====================================================
-        # Request Timeout
-        # =====================================================
+
+        #*******************
+        # Request Timeout  *
+        #*******************
 
         except requests.exceptions.Timeout:
 
@@ -335,9 +375,10 @@ if st.button(
                 "the question. Please try again."
             )
 
-        # =====================================================
-        # Unexpected Error
-        # =====================================================
+
+        #********************
+        # Unexpected Error  *
+        #********************
 
         except Exception as e:
 

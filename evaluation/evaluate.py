@@ -22,19 +22,12 @@ QUESTIONS_FILE = (
 
 def load_questions():
 
-    with open(
-        QUESTIONS_FILE,
-        "r",
-        encoding="utf-8"
-    ) as file:
+    with open(QUESTIONS_FILE, "r", encoding="utf-8") as file:
 
         return json.load(file)
 
 
-def evaluate_retrieval(
-    retrieved_documents,
-    expected_sources
-):
+def evaluate_retrieval(retrieved_documents,expected_sources):
 
     if not expected_sources:
 
@@ -69,34 +62,20 @@ def evaluate():
     print("RAG EVALUATION")
     print("=" * 70)
 
-    for index, item in enumerate(
-        questions,
-        start=1
-    ):
+    for index, item in enumerate(questions, start=1):
 
         question = item["question"]
 
-        expected_sources = item[
-            "expected_sources"
-        ]
+        expected_sources = item["expected_sources"]
 
-        answerable = item[
-            "answerable"
-        ]
+        answerable = item["answerable"]
 
         print()
-        print(
-            f"[{index}/{total}] {question}"
-        )
+        print(f"[{index}/{total}] {question}")
 
-        answer, documents = ask_question(
-            question
-        )
+        answer, documents = ask_question(question)
 
-        retrieval_ok = evaluate_retrieval(
-            documents,
-            expected_sources
-        )
+        retrieval_ok = evaluate_retrieval(documents,expected_sources)
 
         if retrieval_ok:
 
@@ -108,59 +87,37 @@ def evaluate():
 
             status = "FAIL"
 
-        print(
-            f"Retrieval: {status}"
-        )
+        print(f"Retrieval: {status}")
 
-        print(
-            "Expected:",
-            expected_sources
-        )
+        print("Expected:", expected_sources)
+        print("Answerable:", answerable)
 
         retrieved_sources = sorted(
             set(
-                document.metadata.get(
-                    "source",
-                    "Unknown"
-                )
+                document.metadata.get("source", "Unknown")
                 for document in documents
             )
         )
 
-        print(
-            "Retrieved:",
-            retrieved_sources
-        )
+        print("Retrieved:", retrieved_sources)
 
-        print(
-            "Answer:",
-            answer[:300].replace(
-                "\n",
-                " "
-            )
-        )
+        print("Answer:", answer[:300].replace("\n"," "))
 
-    retrieval_accuracy = (
-        retrieval_correct / total
-    ) * 100
+    retrieval_accuracy = (retrieval_correct / total) * 100
 
     print()
     print("=" * 70)
     print("EVALUATION RESULTS")
     print("=" * 70)
 
-    print(
-        f"Total questions: {total}"
+    print(f"Total questions: {total}")
+
+    print(f"Correct retrievals: "
+          f"{retrieval_correct}"
     )
 
-    print(
-        f"Correct retrievals: "
-        f"{retrieval_correct}"
-    )
-
-    print(
-        f"Retrieval accuracy: "
-        f"{retrieval_accuracy:.2f}%"
+    print(f"Retrieval accuracy: "
+          f"{retrieval_accuracy:.2f}%"
     )
 
     print("=" * 70)

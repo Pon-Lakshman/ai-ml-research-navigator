@@ -2,9 +2,9 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 from app.rag import ask_question
 
-# ============================================================
-# FastAPI Application
-# ============================================================
+#***********************
+# FastAPI Application  *
+#***********************
 
 app = FastAPI(
     title="AI/ML Research Navigator API",
@@ -15,9 +15,9 @@ app = FastAPI(
     version="1.0.0",
 )
 
-# ============================================================
-# Request Model
-# ============================================================
+#******************
+# Request Model   *
+#******************
 
 class QuestionRequest(BaseModel):
     question: str = Field(
@@ -26,9 +26,9 @@ class QuestionRequest(BaseModel):
         description="Question about the research papers.",
     )
 
-# ============================================================
-# Response Model
-# ============================================================
+#*******************
+# Response Model   *
+#*******************
 
 class Source(BaseModel):
     source: str
@@ -38,9 +38,9 @@ class QuestionResponse(BaseModel):
     answer: str
     sources: list[Source]
 
-# ============================================================
-# Root Endpoint
-# ============================================================
+#******************
+# Root Endpoint   *
+#******************
 
 @app.get("/")
 def root():
@@ -50,9 +50,9 @@ def root():
         "version": "1.0.0",
     }
 
-# ============================================================
-# Health Endpoint
-# ============================================================
+#********************
+# Health Endpoint   *
+#********************
 
 @app.get("/health")
 def health():
@@ -61,9 +61,9 @@ def health():
         "service": "research-rag-api",
     }
 
-# ============================================================
-# Ask Endpoint
-# ============================================================
+#*****************
+# Ask Endpoint   *
+#*****************
 
 @app.post(
     "/ask",

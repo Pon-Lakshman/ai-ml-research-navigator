@@ -1,17 +1,17 @@
 from pathlib import Path
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-# ============================================================
-# Project Paths
-# ============================================================
+#*****************
+# Project Paths  *
+#*****************
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 PAPERS_DIR = BASE_DIR / "data" / "papers"
 CHROMA_DIR = BASE_DIR / "chroma_db"
 
-# ============================================================
-# Application Configuration
-# ============================================================
+#*****************************
+# Application Configuration  *
+#*****************************
 
 class Settings(BaseSettings):
 
@@ -49,15 +49,15 @@ class Settings(BaseSettings):
         extra="ignore",
     )
 
-# ============================================================
-# Load Settings
-# ============================================================
+#*****************
+# Load Settings  *
+#*****************
 
 settings = Settings()
 
-# ============================================================
-# Backward-Compatible Constants
-# ============================================================
+#**********************************
+# Backward-Compatible Constants   *
+#**********************************
 '''Existing project files can continue using:
 TOP_K, LLM_MODEL, EMBEDDING_MODEL, etc.
 without requiring changes everywhere else.'''
