@@ -64,24 +64,13 @@ def keyword_score(answer, expected_keywords):
 
 def refusal_check(answer):
 
-    refusal_phrases = [
-        "not contain enough information",
-        "do not contain enough information",
-        "not enough information",
-        "no information",
-        "cannot answer",
-        "can't answer",
-        "not available",
-        "not provided",
-        "not found in the research papers"
-    ]
+    refusal_phrase = (
+        "do not contain enough information"
+    )
 
     answer_lower = answer.lower()
 
-    return any(
-        phrase in answer_lower
-        for phrase in refusal_phrases
-    )
+    return refusal_phrase in answer_lower
 
 
 #********************
